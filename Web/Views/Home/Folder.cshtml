@@ -1,0 +1,37 @@
+﻿@using DocumentServices
+@model DocumentServices.Models.FolderInformation
+@{
+    Layout = null;
+}
+<div style="float: left;">
+    <span>@Model.CurrentPath</span>
+    @if (Model.ParentFolder > 0)
+    {
+        <div class="item">
+            <a href="#changeFolder?id=@Model.ParentFolder">
+                <img class="iconItem folderUpIcon" />
+            </a>
+        </div>
+    }
+    @foreach (var folder in Model.Folders)
+    {
+        <div class="item">
+            <a href="#changeFolder?id=@folder.Id" class="folder">
+                <img class="iconItem folderIcon" src="../../Content/images/folder.png" alt="@folder.Name"/>
+                @Html.MinimizeString(folder.Name, 20)
+                <a href="#deleteFolder?id=@folder.Id">Delete</a> | <a href="#renameFolder?id=@folder.Id">Rename</a>
+            </a>
+        </div>
+        <br />
+    }
+    @foreach (var file in Model.Files)
+    {
+        <div class="item">
+            <a href="#openFile?id=@file.Id" class="file">
+                <img class="iconItem fileIcon" src="../../Content/images/file.png" alt="@file.FileName"/>
+                @Html.MinimizeString(file.FileName, 20)
+                <a href="#deleteFile?id=@file.Id">Delete</a> | <a href="#deleteFolder?id=@file.Id">Rename</a>
+            </a>
+        </div>
+    }
+</div>

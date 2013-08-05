@@ -1,0 +1,13 @@
+﻿@model IList<DocumentServices.Models.Comment>
+
+<div id="comment-container">
+    @foreach (var comment in Model)
+    {
+        <div>
+            <span><strong>@comment.OwnerUser.Name @comment.OwnerUser.Surname.Substring(0, 1).</strong> @@ @comment.CommentDate</span>
+            <p>@comment.Text</p>
+        </div>
+    }
+    <textarea id="comment"></textarea><br />
+    <button id="addcomment">save comment</button>
+</div>

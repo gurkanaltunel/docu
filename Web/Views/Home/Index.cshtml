@@ -1,0 +1,18 @@
+﻿@model Web.Models.MainViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<div class="main">
+    <div class="list folder">
+        <button id="addfolder">Add new folder</button>
+        <button id="addfile">Add new file</button>
+        <div id="container" style="display: none;"></div>
+        <div id="itemsContainer">
+            @Html.Partial("Folder", Model.CurrentFolder)
+        </div>
+    </div>
+</div>

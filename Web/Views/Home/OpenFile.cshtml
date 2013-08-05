@@ -1,0 +1,61 @@
+﻿@model Web.Models.OpenFileViewModel
+
+@{
+    Layout = null;
+}
+
+<a id="returnBack"><< Return</a>
+<br />
+<hr />
+<div class="last version">
+    Download File : @Html.ActionLink(@Model.File.FileName, "GetFile", new { versionId = Model.LastFileVersion.Id }) (v.@Model.LastFileVersion.VersionNumber) <br/>
+    Comments count: @Model.LastFileVersion.Comments.Count
+    <div class="version-item">
+        @Html.Partial("GetComments", Model.LastFileVersion.Comments)
+    </div>
+</div>
+
+<div>
+    @foreach (var fileVersion in Model.FileVersions.Where(version => version.Id != Model.LastFileVersion.Id))
+    {
+        <div class="version">@string.Format("v.{0} ({1})", fileVersion.VersionNumber, fileVersion.Comments.Count)
+
+            <div class="version-item" id="version-@fileVersion.Id">
+                @Html.ActionLink("Download this version", "GetFile", new { versionId = fileVersion.Id })
+                @foreach (var comment in fileVersion.Comments)
+                {
+                    <span>@comment.OwnerUser.Name @@ @comment.CommentDate</span>
+                    <p>
+                        @comment.Text
+                    </p>
+                    <br />
+                }
+            </div>
+        </div> 
+       
+    }
+</div>
+<hr />
+<br />
+
+
+<script>
+    $(".version").click(function () {
+        $(".version-item").hide();
+        $(this).find(".version-item").show();
+    });
+    $("#returnBack").click(function() {
+        window.history.back();
+    }).css("cursor","pointer");
+    $("#addcomment").click(function () {
+        var commentElement = document.getElementById("comment");
+        $.post("/Home/AddComment", { Id: @Model.LastFileVersion.Id, Value: commentElement.value }).success(function() {
+            $.get("/Home/GetComments?id=" + @Model.LastFileVersion.Id).success(function(result) {
+                $("#comment-container").html(result);
+                $(commentElement).focus();
+            });
+        }).fail(function() {
+            alert("never.");
+        });
+    });
+</script>
